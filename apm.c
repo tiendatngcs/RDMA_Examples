@@ -100,7 +100,7 @@ struct context
  */
 static void *async_event_thread(void *arg)
 {
-    printf("async_event_thread called");
+    printf("async_event_thread called\n");
     struct ibv_async_event event;
     int ret;
  
@@ -149,7 +149,7 @@ static void *async_event_thread(void *arg)
  */
 int get_alt_dlid_from_private_data(struct rdma_cm_event *event, uint16_t *dlid)
 {
-    printf("get_alt_dlid_from_private_data called");
+    printf("get_alt_dlid_from_private_data called\n");
     if (event->param.conn.private_data_len < 4) {
         printf("unexpected private data len: %d",
                event->param.conn.private_data_len);
@@ -186,7 +186,7 @@ int get_alt_dlid_from_private_data(struct rdma_cm_event *event, uint16_t *dlid)
  */
 int get_alt_port_details(struct context *ctx)
 {
-    printf("get_alt_port_details called");
+    printf("get_alt_port_details called\n");
     int ret, i;
     struct ibv_qp_attr qp_attr;
     struct ibv_qp_init_attr qp_init_attr;
@@ -254,7 +254,7 @@ int get_alt_port_details(struct context *ctx)
  */
 int load_alt_path(struct context *ctx)
 {
-    printf("load_alt_path called");
+    printf("load_alt_path called\n");
     int ret;
     struct ibv_qp_attr qp_attr;
     struct ibv_qp_init_attr qp_init_attr;
@@ -312,7 +312,7 @@ int load_alt_path(struct context *ctx)
  */
 int reg_mem(struct context *ctx)
 {
-    printf("reg_mem called");
+    printf("reg_mem called\n");
     ctx->send_buf = (char *) malloc(ctx->msg_length);
     memset(ctx->send_buf, 0x12, ctx->msg_length);
  
@@ -351,7 +351,7 @@ int reg_mem(struct context *ctx)
  */
 int getaddrinfo_and_create_ep(struct context *ctx)
 {
-    printf("getaddrinfo_and_create_ep called");
+    printf("getaddrinfo_and_create_ep called\n");
     int ret;
     struct rdma_addrinfo *rai, hints;
     struct ibv_qp_init_attr qp_init_attr;
@@ -361,7 +361,6 @@ int getaddrinfo_and_create_ep(struct context *ctx)
     if (ctx->server == 1)
         hints.ai_flags = RAI_PASSIVE; /* this makes it a server */
  
-    printf("rdma_getaddrinfo\n");
     ret = rdma_getaddrinfo(ctx->server_name, ctx->server_port, &hints, &rai);
     if (ret) {
         VERB_ERR("rdma_getaddrinfo", ret);
@@ -374,8 +373,7 @@ int getaddrinfo_and_create_ep(struct context *ctx)
     qp_init_attr.cap.max_recv_wr = 1;
     qp_init_attr.cap.max_send_sge = 1;
     qp_init_attr.cap.max_recv_sge = 1;
- 
-    printf("rdma_create_ep\n");
+
     ret = rdma_create_ep(&ctx->id, rai, NULL, &qp_init_attr);
     if (ret) {
         VERB_ERR("rdma_create_ep", ret);
@@ -404,10 +402,9 @@ int getaddrinfo_and_create_ep(struct context *ctx)
  */
 int get_connect_request(struct context *ctx)
 {
-    printf("get_connect_request called");
+    printf("get_connect_request called\n");
     int ret;
- 
-    printf("rdma_listen\n");
+
     ret = rdma_listen(ctx->id, 4);
     if (ret) {
         VERB_ERR("rdma_listen", ret);
@@ -416,7 +413,6 @@ int get_connect_request(struct context *ctx)
  
     ctx->listen_id = ctx->id;
  
-    printf("rdma_get_request\n");
     ret = rdma_get_request(ctx->listen_id, &ctx->id);
     if (ret) {
         VERB_ERR("rdma_get_request", ret);
@@ -460,7 +456,7 @@ int get_connect_request(struct context *ctx)
  */
 int establish_connection(struct context *ctx)
 {
-    printf("establish_connection called");
+    printf("establish_connection called\n");
     int ret;
     uint16_t private_data;
     struct rdma_conn_param conn_param;
@@ -537,7 +533,7 @@ int establish_connection(struct context *ctx)
  */
 int send_msg(struct context *ctx)
 {
-    printf("send_msg called");
+    printf("send_msg called\n");
     int ret;
     struct ibv_wc wc;
  
@@ -574,7 +570,7 @@ int send_msg(struct context *ctx)
  */
 int recv_msg(struct context *ctx)
 {
-    printf("recv_msg called");
+    printf("recv_msg called\n");
     int ret;
     struct ibv_wc wc;
  
@@ -611,7 +607,7 @@ int recv_msg(struct context *ctx)
  */
 int main(int argc, char** argv)
 {
-    printf("main called");
+    printf("main called\n");
     int ret, op, i, send_cnt, recv_cnt;
     struct context ctx;
     struct ibv_qp_attr qp_attr;
@@ -673,7 +669,7 @@ int main(int argc, char** argv)
         }
     }
  
-    printf("mode:       %s\n", (ctx.server) ? "server" : "client");
+    printf("mode:       %s\n", (ctx.server) ? "server" : "client\n");
     printf("address:    %s\n", (!ctx.server_name) ? "NULL" : ctx.server_name);
     printf("port:       %s\n", ctx.server_port);
     printf("count:      %d\n", ctx.msg_count);
