@@ -100,6 +100,7 @@ struct context
  */
 static void *async_event_thread(void *arg)
 {
+    printf("async_event_thread called");
     struct ibv_async_event event;
     int ret;
  
@@ -148,6 +149,7 @@ static void *async_event_thread(void *arg)
  */
 int get_alt_dlid_from_private_data(struct rdma_cm_event *event, uint16_t *dlid)
 {
+    printf("get_alt_dlid_from_private_data called");
     if (event->param.conn.private_data_len < 4) {
         printf("unexpected private data len: %d",
                event->param.conn.private_data_len);
@@ -184,6 +186,7 @@ int get_alt_dlid_from_private_data(struct rdma_cm_event *event, uint16_t *dlid)
  */
 int get_alt_port_details(struct context *ctx)
 {
+    printf("get_alt_port_details called");
     int ret, i;
     struct ibv_qp_attr qp_attr;
     struct ibv_qp_init_attr qp_init_attr;
@@ -251,6 +254,7 @@ int get_alt_port_details(struct context *ctx)
  */
 int load_alt_path(struct context *ctx)
 {
+    printf("load_alt_path called");
     int ret;
     struct ibv_qp_attr qp_attr;
     struct ibv_qp_init_attr qp_init_attr;
@@ -308,6 +312,7 @@ int load_alt_path(struct context *ctx)
  */
 int reg_mem(struct context *ctx)
 {
+    printf("reg_mem called");
     ctx->send_buf = (char *) malloc(ctx->msg_length);
     memset(ctx->send_buf, 0x12, ctx->msg_length);
  
@@ -346,6 +351,7 @@ int reg_mem(struct context *ctx)
  */
 int getaddrinfo_and_create_ep(struct context *ctx)
 {
+    printf("getaddrinfo_and_create_ep called");
     int ret;
     struct rdma_addrinfo *rai, hints;
     struct ibv_qp_init_attr qp_init_attr;
@@ -398,6 +404,7 @@ int getaddrinfo_and_create_ep(struct context *ctx)
  */
 int get_connect_request(struct context *ctx)
 {
+    printf("get_connect_request called");
     int ret;
  
     printf("rdma_listen\n");
@@ -453,6 +460,7 @@ int get_connect_request(struct context *ctx)
  */
 int establish_connection(struct context *ctx)
 {
+    printf("establish_connection called");
     int ret;
     uint16_t private_data;
     struct rdma_conn_param conn_param;
@@ -529,6 +537,7 @@ int establish_connection(struct context *ctx)
  */
 int send_msg(struct context *ctx)
 {
+    printf("send_msg called");
     int ret;
     struct ibv_wc wc;
  
@@ -565,6 +574,7 @@ int send_msg(struct context *ctx)
  */
 int recv_msg(struct context *ctx)
 {
+    printf("recv_msg called");
     int ret;
     struct ibv_wc wc;
  
@@ -601,6 +611,7 @@ int recv_msg(struct context *ctx)
  */
 int main(int argc, char** argv)
 {
+    printf("main called");
     int ret, op, i, send_cnt, recv_cnt;
     struct context ctx;
     struct ibv_qp_attr qp_attr;
@@ -674,6 +685,7 @@ int main(int argc, char** argv)
     printf("\n");
  
     if (!ctx.server && !ctx.server_name) {
+        // on server node, ctx.server = 1  and ctx_server_name = NULL
         printf("server address must be specified for client mode\n");
         exit(1);
     }
@@ -695,6 +707,7 @@ int main(int argc, char** argv)
         goto out;
  
     if (ctx.server) {
+        // if the current node is a server
         ret = get_connect_request(&ctx);
         if (ret)
             goto out;
