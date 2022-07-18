@@ -2,3 +2,4 @@ apm
 my_test
 rdma_test
 rdma_example
+*.exe
