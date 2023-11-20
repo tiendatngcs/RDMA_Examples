@@ -1,6 +1,6 @@
 /* 
  * Compile Command:
- * gcc rdma_example.c -o rdma_example -libverbs -lrdmacm -pthread
+ * gcc rdma_example.c -o rdma_example.exe -libverbs -lrdmacm -pthread
  * 
  */
 
